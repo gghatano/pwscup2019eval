@@ -4,7 +4,7 @@ PWSCUP2019の支援する機能を盛り込んでいきます
 * データを投稿すると、フォーマットが正しいかどうかをチェックしてくれる
 * データを投稿すると、有用性を評価してくれる
 
-![イメージ]()
+![動作イメージ](https://github.com/gghatano/pwscup2019eval/blob/images/PWSCUP2019_evalsystem.jpg?raw=true)
 
 
 # バグ報告
