@@ -7,7 +7,7 @@ library(DT)
 # ui----
 shinyUI(
   dashboardPage(skin = "yellow", 
-    dashboardHeader(title = "PWS Cup 2019"),
+    dashboardHeader(title = "PWSCUP2019 予備選"),
     ## Sidebar content
     dashboardSidebar(
       sidebarMenu(
@@ -32,8 +32,8 @@ shinyUI(
                   box(
                     title = "ID再識別対応匿名化後データ",
                     width = 4,
-                    fileInput("file_round1_anon_reid", label = NULL, buttonLabel = "Select File")
-                    h4("注意: ファイル名・有用性スコアは、他の参加者が見る↓のリーダボードにも表示されます")
+                    fileInput("file_round1_anon_reid", label = NULL, buttonLabel = "Select File"),
+                    h4("注意: ファイル名・有用性スコアは、他の参加者が見る↓のリーダボードにも表示されます"),
                     h4("注意: ファイル名・有用性スコアを秘匿したい場合は、ローカル版Appを利用してください")
                   ),
                   box(
@@ -49,18 +49,53 @@ shinyUI(
                 ),
                 fluidRow(
                   box(
-                    title = "リーダーボード",
-                    width = 12, 
+                    title = "提出されたデータ", 
+                    width = 6, 
                     DT::dataTableOutput("table_round1_anon_reid")
+                  ),
+                  box(
+                    title = "リーダーボード",
+                    width = 6, 
+                    DT::dataTableOutput("board_round1_anon_reid")
                   )
                 )
         ),
-        tabItem(tabName = "round1_anon_retrace"
+        tabItem(tabName = "round1_anon_retrace",
+                fluidRow(
+                  box(
+                    title = "トレース推定対応匿名化後データ",
+                    width = 4,
+                    fileInput("file_round1_anon_retrace", label = NULL, buttonLabel = "Select File"),
+                    h4("注意: ファイル名・有用性スコアは、他の参加者が見る↓のリーダボードにも表示されます"),
+                    h4("注意: ファイル名・有用性スコアを秘匿したい場合は、ローカル版Appを利用してください")
+                  ),
+                  box(
+                    title = "フォーマットチェック", 
+                    width = 4, 
+                    verbatimTextOutput("format_round1_anon_retrace")
+                  ), 
+                  box(
+                    title = "有用性評価結果",
+                    width = 4, 
+                    verbatimTextOutput("utility_round1_anon_retrace")
+                  )
+                ),
+                fluidRow(
+                  box(
+                    title = "提出されたデータ", 
+                    width = 6, 
+                    DT::dataTableOutput("table_round1_anon_retrace")
+                  ),
+                  box(
+                    title = "リーダーボード",
+                    width = 6, 
+                    DT::dataTableOutput("board_round1_anon_retrace")
+                  )
+                )
         ),
         tabItem(tabName = "round1_reid"
         ),
-        tabItem(tabName = "round1_retrace",
-                "10月末に公開予定"
+        tabItem(tabName = "round1_retrace"
         )
       )
     )
