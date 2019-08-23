@@ -6,9 +6,8 @@ PWSCUP2019の支援する機能を盛り込んでいきます
 
 ![動作イメージ](https://github.com/gghatano/pwscup2019eval/blob/images/PWSCUP2019_evalsystem.jpg?raw=true)
 
-
 # バグ報告
-* ISSUEを立てるか, [Twitter](https://twitter.com/gg_hatano)で連絡してください
+* [Githbub](https://github.com/gghatano/pwscup2019eval/issues)でISSUEを立てるか, [Twitter](https://twitter.com/gg_hatano)で連絡してください
 
 # 実行・開発方法
 Rstudioの利用を推奨します R と Shinyの知識が必要です
@@ -23,6 +22,12 @@ Rstudioの利用を推奨します R と Shinyの知識が必要です
   * server/format_check_anon.R : 匿名加工後データのフォーマットチェッカ 
   * server/format_check_reid.R : ID再識別データのフォーマットチェッカ
   * server/format_check_retrace.R : トレース推定のフォーマットチェッカ
+
+# Todo
+- 有用性評価実装
+- フォーマットチェッカー実装
+- リーダーボード更新実装
+- 再識別画面作成
 
 ## 連絡先
 Twitter: @gg_hatano
