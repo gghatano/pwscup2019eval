@@ -15,8 +15,9 @@ output$table_round1_anon_reid = renderDataTable({
   
   ## format check
   output$format_round1_anon_reid = renderText({
-    ## TODO :: format check用の処理
-    "OK!" %>% return
+    ## formatのチェック
+    result = anon_formatcheck(table_round1_anon_reid)
+    result %>% return
   })
   
   ## utility check
