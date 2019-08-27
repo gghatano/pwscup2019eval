@@ -13,11 +13,11 @@ calc_reg_id_dist_table = function(){
   
   dat_regid1 = 
     regiondata %>% 
-    select(reg_id1 = reg_id, y1 = `y(center)`, x1 = `x(center)`) 
+    dplyr::select(reg_id1 = reg_id, y1 = `y(center)`, x1 = `x(center)`) 
   
   dat_regid2 = 
     dat_regid1 %>% 
-    select(reg_id2 = reg_id1, y2 = y1, x2 = x1 )
+    dplyr::select(reg_id2 = reg_id1, y2 = y1, x2 = x1 )
     
   dat_distance = 
     merge(dat_regid1, dat_regid2, all = TRUE) %>% 
@@ -25,15 +25,16 @@ calc_reg_id_dist_table = function(){
   
   regiondata = 
     regiondata %>% 
-    select(reg_id1 = reg_id, reg_id1_is_hospital = hospital)
+    dplyr::select(reg_id1 = reg_id, reg_id1_is_hospital = hospital)
   
   dat_distance %>% 
-    mutate(diff_y = abs(y1 - y2), 
+    dplyr::mutate(diff_y = abs(y1 - y2), 
            diff_x = abs(x1 - x2)) %>% 
-    mutate(dist_y = diff_y * 111, 
+    dplyr::mutate(dist_y = diff_y * 111, 
            dist_x = diff_x * 91) %>% 
-    mutate(dist = sqrt(dist_y ** 2 + dist_x **2)) %>% 
-    select(reg_id1, reg_id2, dist) %>%
+    dplyr::mutate(dist = sqrt(dist_y ** 2 + dist_x **2)) %>% 
+    dplyr::mutate(reg_id2 = as.character(reg_id2)) %>% 
+    dplyr::select(reg_id1, reg_id2, dist) %>%
     inner_join(regiondata) %>% 
     write.csv("./data/regid_distance_osaka.csv", row.names = FALSE, quote=FALSE)
     
@@ -46,17 +47,18 @@ utility = function(rawdata = NULL, anondata){
   
   ## データ読み込み
   ### 距離行列
-  dat_distance = readr::read_csv("./data/regid_distance_osaka.csv", col_types = "ccdc")
+  dat_distance = 
+    readr::read_csv("./data/regid_distance_osaka.csv", col_types = "ccdc")
   ### 元データ
   ### (_IDPと_TRPの切り替え機能を実装するかも)
   rawdata = readr::read_csv("./data/orgtraces_team001_data01_IDP.csv")
   
-  ## test
-  anondata = readr::read_csv("./data/test_anotraces_team001_data01_IDP.csv")
-  
+  ## 対応表を作る
   dat_regid = 
-    data.frame(RAW = rawdata$reg_id, ANON = anondata$reg_id, 
-               TIME = rawdata$time_id, USER = rawdata$user_id)
+    data.frame(RAW = as.character(rawdata$reg_id), 
+               ANON = as.character(anondata$reg_id), 
+               TIME = rawdata$time_id, 
+               USER = rawdata$user_id)
   
   dat_regid_not_deleted2 = 
     dat_regid %>% 
@@ -77,10 +79,10 @@ utility = function(rawdata = NULL, anondata){
   
   utility_score = 
     dat_regid_dist %>% 
-    group_by(USER, TIME) %>% 
-    summarise(dist_mean = mean(dist)) %>% 
-    mutate(UTILITY = if_else(dist_mean > DISTANCE_THRESHOLD, 0, 1 - dist_mean / DISTANCE_THRESHOLD)) %>% 
-    pull(UTILITY) %>% 
+    dplyr::group_by(USER, TIME) %>% 
+    dplyr::summarise(dist_mean = mean(dist)) %>% 
+    dplyr::mutate(UTILITY = if_else(dist_mean > DISTANCE_THRESHOLD, 0, 1 - dist_mean / DISTANCE_THRESHOLD)) %>% 
+    dplyr::pull(UTILITY) %>% 
     mean
   
   return(utility_score)
@@ -88,6 +90,6 @@ utility = function(rawdata = NULL, anondata){
 
 
 ## test
-anondata = readr::read_csv("./data/test_anotraces_team001_data01_IDP.csv")
+# anondata = readr::read_csv("./data/test_anotraces_team001_data01_IDP.csv")
 
-utility(anondata = anondata)
+# utility(anondata = anondata)

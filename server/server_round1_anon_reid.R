@@ -60,7 +60,7 @@ output$board_round1_anon_reid = renderDataTable({
                              use_proxy("http://proxy.ns-sol.co.jp", 8000), verbose())
   table_round1_anon_reid = api_round1_anon_reid %>% 
     content %>% 
-    rlist::list.stack
+    rlist::list.stack()
   
   table_round1_anon_reid %>% return
 }, options = list(pageLength = 10))

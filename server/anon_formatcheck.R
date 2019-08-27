@@ -23,7 +23,7 @@ REG_ID_LIST = c(REG_ID_LIST, DELETE_FLG)
 TIME_ID_LIST = 1:40 %>% as.character
 
 
-### 
+### テーブルの形 
 ANONDATA_COLUMN_NUM = 1
 ANONDATA_ROW_NUM = 80000
 
@@ -60,13 +60,27 @@ anon_formatcheck = function(anondata){
   }
   
   ## reg_idエラー
-  reg_id_result = 
-    anondata$reg_id %>% 
-    as.character %>% 
-    lapply(function(x){
-      x %>% strsplit(" ") %>% unlist %in% REG_ID_LIST %>% prod
-      }) %>% unlist %>% as.logical
+  ### REG_ID_LISTに入っているかどうか確認する
+  # reg_id_result = 
+  #   anondata$reg_id %>% 
+  #   as.character %>% 
+  #   lapply(function(x){
+  #     x %>% strsplit(" ") %>% unlist %in% REG_ID_LIST %>% prod
+  #     }) %>% unlist %>% as.logical
   
+  ## reg_id エラー
+  ### 全ての要素が正しくREG_ID_LISTに入っているかどうか確認する
+  reg_id_result = 
+    anondata %>% 
+    dplyr::mutate(ROW_NUM = 1:nrow(.)) %>% 
+    tidyr::separate_rows(col = reg_id, sep = " ") %>% 
+    dplyr::mutate(FLG = (reg_id %in% REG_ID_LIST)) %>% 
+    dplyr::group_by(ROW_NUM) %>% 
+    dplyr::summarise(FLG_ALL = all(FLG)) %>% 
+    dplyr::ungroup() %>%
+    dplyr::pull(FLG_ALL)
+    
+  ### エラー行の番号を探す
   reg_id_result = which(!reg_id_result)
   
   reg_id_error_message = ""
@@ -74,12 +88,10 @@ anon_formatcheck = function(anondata){
     reg_id_error_message = reg_id_result %>% paste("行目のreg_idがエラーです") 
   }
   
-  
   ## メッセージ組み立て
-  error_message = c(column_num_error_message,
+  error_message = 
+    c(column_num_error_message,
     column_name_error_message,
- #   user_id_error_message,
- #   time_id_error_message,
     reg_id_error_message) 
   
   ### 空文字の除外
@@ -96,6 +108,7 @@ anon_formatcheck = function(anondata){
     return
 }
 
+## テスト用
 # ####################################################
 # ## 正常系
 # set.seed(71)
@@ -105,8 +118,8 @@ anon_formatcheck = function(anondata){
 # dat_test = data.frame(reg_id = reg_id)
 # print("OK!")
 # dat_test %>% anon_formatcheck
-# 
-# ####################################################
+# # 
+# # ####################################################
 # ## 行フォーマットエラー
 # set.seed(71)
 # TEST_SIZE = 80000
