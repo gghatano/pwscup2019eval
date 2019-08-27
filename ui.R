@@ -13,9 +13,9 @@ shinyUI(
       sidebarMenu(
         menuItem("Information", tabName = "information", icon = icon("dashboard")),
         menuItem("予備選_匿名化(ID推定対応)", tabName = "round1_anon_reid", icon = icon("th")),
-        menuItem("予備選_匿名化(トレース推定対応)", tabName = "round1_anon_retrace", icon = icon("th")),
-        menuItem("予備選_ID推定", tabName = "round1_reid", icon = icon("th")),
-        menuItem("予備選_トレース推定", tabName = "round1_retrace", icon = icon("th"))
+        menuItem("[未実装] 予備選_匿名化(トレース推定対応)", tabName = "round1_anon_retrace", icon = icon("th")),
+        menuItem("[未実装] 予備選_ID推定", tabName = "round1_reid", icon = icon("th")),
+        menuItem("[未実装] 予備選_トレース推定", tabName = "round1_retrace", icon = icon("th"))
       )
     ),
     dashboardBody(
@@ -33,8 +33,7 @@ shinyUI(
                     title = "ID再識別対応匿名化後データ",
                     width = 4,
                     fileInput("file_round1_anon_reid", label = NULL, buttonLabel = "Select File"),
-                    h4("注意: ファイル名・有用性スコアは、他の参加者が見る↓のリーダボードにも表示されます"),
-                    h4("注意: ファイル名・有用性スコアを秘匿したい場合は、ローカル版Appを利用してください")
+                    h4("orgtraces_team001_data01_IDP.csvを加工したデータを投稿して下さい")
                   ),
                   box(
                     title = "フォーマットチェック", 
@@ -49,49 +48,18 @@ shinyUI(
                 ),
                 fluidRow(
                   box(
-                    title = "提出されたデータ", 
+                    title = "投稿されたデータ", 
                     width = 6, 
                     DT::dataTableOutput("table_round1_anon_reid")
                   ),
                   box(
-                    title = "リーダーボード",
+                    title = "リーダーボード(9月中に実装予定)",
                     width = 6, 
                     DT::dataTableOutput("board_round1_anon_reid")
                   )
                 )
         ),
-        tabItem(tabName = "round1_anon_retrace",
-                fluidRow(
-                  box(
-                    title = "トレース推定対応匿名化後データ",
-                    width = 4,
-                    fileInput("file_round1_anon_retrace", label = NULL, buttonLabel = "Select File"),
-                    h4("注意: ファイル名・有用性スコアは、他の参加者が見る↓のリーダボードにも表示されます"),
-                    h4("注意: ファイル名・有用性スコアを秘匿したい場合は、ローカル版Appを利用してください")
-                  ),
-                  box(
-                    title = "フォーマットチェック", 
-                    width = 4, 
-                    verbatimTextOutput("format_round1_anon_retrace")
-                  ), 
-                  box(
-                    title = "有用性評価結果",
-                    width = 4, 
-                    verbatimTextOutput("utility_round1_anon_retrace")
-                  )
-                ),
-                fluidRow(
-                  box(
-                    title = "提出されたデータ", 
-                    width = 6, 
-                    DT::dataTableOutput("table_round1_anon_retrace")
-                  ),
-                  box(
-                    title = "リーダーボード",
-                    width = 6, 
-                    DT::dataTableOutput("board_round1_anon_retrace")
-                  )
-                )
+        tabItem(tabName = "round1_anon_retrace"
         ),
         tabItem(tabName = "round1_reid"
         ),
