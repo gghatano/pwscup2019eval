@@ -7,28 +7,41 @@ output$table_round1_anon_reid = renderDataTable({
   
   
   ## データ読み込み
-  table_round1_anon_reid = read_csv(file = file_round1_anon_reid$datapath)
+  table_round1_anon_reid = readr::read_csv(file = file_round1_anon_reid$datapath)
+  
   if(is.null(table_round1_anon_reid)){
     return(NULL)
   }
   
   
-  ## format check
+  ## チェック中、と表示する
   output$format_round1_anon_reid = renderText({
-    ## formatのチェック
+    return("チェック中...")
+  })
+  
+  ## 計算中、と表示する
+  output$utility_round1_anon_reid = renderText({
+    return("計算中...")
+  })
+  
+  ## formatのチェック処理
+  output$format_round1_anon_reid = renderText({
     result = anon_formatcheck(table_round1_anon_reid)
     result %>% return
   })
   
   ## utility check
   output$utility_round1_anon_reid = renderText({
-    ## TODO :: utility check 用の処理
     
-    0.005 %>% return
+    utility_score = utility(rawdata = table_round1_anon_reid, anondata = table_round1_anon_reid)
     
     ## TODO :: ファイル名と有用性評価値と投稿日時をアップロードする仕組みを作る
+    
+    return(utility_score)
+    
   })
   
+  ## 投稿済みデータの示
   table_round1_anon_reid %>% return
 }, options = list(pageLength = 10))
 
@@ -47,7 +60,7 @@ output$board_round1_anon_reid = renderDataTable({
                              use_proxy("http://proxy.ns-sol.co.jp", 8000), verbose())
   table_round1_anon_reid = api_round1_anon_reid %>% 
     content %>% 
-    list.stack
+    rlist::list.stack
   
   table_round1_anon_reid %>% return
 }, options = list(pageLength = 10))

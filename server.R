@@ -12,6 +12,7 @@ shinyServer(
   function(input, output) {
     ### 汎用処理関数
     source("./server/anon_formatcheck.R", local = TRUE)
+    source("./server/utility.R", local = TRUE)
     
     ### タブ別のserverファイル
     source("./server/server_round1_anon_reid.R", local = TRUE)
