@@ -29,6 +29,10 @@ output$table_round1_anon_reid = renderDataTable({
     
     output$format_round1_anon_reid = renderText({
       result = anon_formatcheck(table_round1_anon_reid)
+      
+      if(result != "OK"){
+        output$utility_round1_anon_reid = renderText("")
+      }
       result %>% return
     })
     
@@ -38,7 +42,7 @@ output$table_round1_anon_reid = renderDataTable({
     
     output$utility_round1_anon_reid = renderText({
       
-      utility_score = utility(rawdata = table_round1_anon_reid, anondata = table_round1_anon_reid)
+      utility_score = utility(anondata = table_round1_anon_reid)
       
       ## TODO :: ファイル名と有用性評価値と投稿日時をアップロードする仕組みを作る
       
