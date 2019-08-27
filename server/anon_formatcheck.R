@@ -1,14 +1,29 @@
 library(dplyr)
 
 ####################################################
+## フォーマットのエラーを指摘する
+
+
+####################################################
 ## グローバル変数
+
+### チーム別のユーザID
 PRIVATE_USER_ID_LIST = 1:2000 %>% as.character
 PUBLIC_USER_ID_LIST = 2001:4000 %>% as.character
-REG_ID_LIST = 1:1024 %>% as.character
-TIME_ID_LIST = 1:1024 %>% as.character
 
+### 領域ID
+REG_ID_LIST = 1:1024 %>% as.character
+
+### 元トレースの時刻ID
+TIME_ID_LIST = 1:40 %>% as.character
+
+### 一般化と削除の表記
 DELETE_FLG = "*"
 SEPARATION_CHAR = " "
+
+### 
+ANONDATA_COLUMN_NUM = 3
+ANONDATA_ROW_NUM = 80000
 
 
 ####################################################
@@ -16,7 +31,7 @@ SEPARATION_CHAR = " "
 set.seed(71)
 TEST_SIZE = 100
 user_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
-time_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
+time_id = sample(x = 1:80, size = TEST_SIZE, replace = TRUE) %>% as.character
 reg_id = sample(x = c(1:10, "10 10", "20 29", "10,20"), size = TEST_SIZE, replace = TRUE) %>% as.character
 
 dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
@@ -33,8 +48,14 @@ anon_formatcheck = function(anondata){
   column_num_result = anondata %>% colnames %>% length 
   
   column_num_error_message = ""
-  if(column_num_result != 3){
+  if(column_num_result != ANONDATA_COLUMN_NUM){
     return("列数エラーです")
+  }
+  
+  ### 行数エラー
+  row_num_result = anondata %>% nrow
+  if(row_num_result != ANONDATA_ROW_NUM){
+    return("行数エラーです")
   }
   
   ## 列名・列順エラー
@@ -84,54 +105,66 @@ anon_formatcheck = function(anondata){
     time_id_error_message,
     reg_id_error_message) 
   
-  ###  空文字の除外
+  ### 空文字の除外
   error_message = error_message[error_message > 0]
   
   if(length(error_message) == 0){
     return("OK")
   }
   
-  ###  長すぎても困るので、先頭100行だけ
+  ### 長すぎても困るので、先頭100行だけ
   error_message %>% 
     head(100) %>% 
     paste(collapse = "\n") %>% 
     return
 }
 
-# ####################################################
-# ## 正常系
-# set.seed(71)
-# TEST_SIZE = 100
-# user_id = sample(x = 1:2000, size = TEST_SIZE, replace = TRUE) %>% as.character
-# time_id = sample(x = 1:1024, size = TEST_SIZE, replace = TRUE) %>% as.character
-# reg_id = sample(x = c(1:10, "10 10", "20 29", "10 20"), size = TEST_SIZE, replace = TRUE) %>% as.character
-# 
-# dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
-# print("OK!")
-# dat_test %>% anon_formatcheck
-# 
-# ####################################################
-# ## 行フォーマットエラー
-# set.seed(71)
-# TEST_SIZE = 100
-# user_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
-# time_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
-# reg_id = sample(x = c(1:10, "10 10", "20 29", "10,20"), size = TEST_SIZE, replace = TRUE) %>% as.character
-# 
-# dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
-# 
-# print("NG!")
-# dat_test %>% anon_formatcheck
-# 
-# ####################################################
-# ## 列名エラー
-# colnames(dat_test) = c("hoge", "huge", "hage")
-# print("列名")
-# dat_test %>% anon_formatcheck
-# 
-# ####################################################
-# ## 列数エラー
-# dat_test = data.frame(user_id = user_id, time_id = time_id)
-# print("列数")
-# dat_test %>% anon_formatcheck
-#   
+####################################################
+## 正常系
+set.seed(71)
+TEST_SIZE = 80000
+user_id = sample(x = 1:2000, size = TEST_SIZE, replace = TRUE) %>% as.character
+time_id = sample(x = 1:1024, size = TEST_SIZE, replace = TRUE) %>% as.character
+reg_id = sample(x = c(1:10, "10 10", "20 29", "10 20"), size = TEST_SIZE, replace = TRUE) %>% as.character
+
+dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
+print("OK!")
+dat_test %>% anon_formatcheck
+
+####################################################
+## 行フォーマットエラー
+set.seed(71)
+TEST_SIZE = 80000
+user_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
+time_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
+reg_id = sample(x = c(1:10, "10 10", "20 29", "10,20"), size = TEST_SIZE, replace = TRUE) %>% as.character
+
+dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
+
+print("NG!")
+dat_test %>% anon_formatcheck
+
+####################################################
+## 列名エラー
+colnames(dat_test) = c("hoge", "huge", "hage")
+print("列名")
+dat_test %>% anon_formatcheck
+
+####################################################
+## 列数エラー
+dat_test = data.frame(user_id = user_id, time_id = time_id)
+print("列数")
+dat_test %>% anon_formatcheck
+
+
+####################################################
+## 行数エラー
+TEST_SIZE = 10
+user_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
+time_id = sample(x = 1:3010, size = TEST_SIZE, replace = TRUE) %>% as.character
+reg_id = sample(x = c(1:10, "10 10", "20 29", "10,20"), size = TEST_SIZE, replace = TRUE) %>% as.character
+
+dat_test = data.frame(user_id = user_id, time_id = time_id, reg_id = reg_id)
+
+print("NG!")
+dat_test %>% anon_formatcheck
