@@ -59,15 +59,6 @@ anon_formatcheck = function(anondata){
     return("列名エラーです")
   }
   
-  ## reg_idエラー
-  ### REG_ID_LISTに入っているかどうか確認する
-  # reg_id_result = 
-  #   anondata$reg_id %>% 
-  #   as.character %>% 
-  #   lapply(function(x){
-  #     x %>% strsplit(" ") %>% unlist %in% REG_ID_LIST %>% prod
-  #     }) %>% unlist %>% as.logical
-  
   ## reg_id エラー
   ### 全ての要素が正しくREG_ID_LISTに入っているかどうか確認する
   reg_id_result = 

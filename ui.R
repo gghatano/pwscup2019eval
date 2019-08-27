@@ -12,10 +12,10 @@ shinyUI(
     dashboardSidebar(
       sidebarMenu(
         menuItem("Information", tabName = "information", icon = icon("dashboard")),
-        menuItem("予備選_匿名化(ID推定対応)", tabName = "round1_anon_reid", icon = icon("th")),
-        menuItem("予備選_匿名化(トレース推定対応)", tabName = "round1_anon_retrace", icon = icon("th")),
-        menuItem("予備選_ID推定", tabName = "round1_reid", icon = icon("th")),
-        menuItem("予備選_トレース推定", tabName = "round1_retrace", icon = icon("th"))
+        menuItem("匿名化(ID推定対応)", tabName = "round1_anon_reid", icon = icon("th")),
+        menuItem("匿名化(トレース推定対応)", tabName = "round1_anon_retrace", icon = icon("th")),
+        menuItem("ID再識別", tabName = "round1_reid", icon = icon("th")),
+        menuItem("トレース推定", tabName = "round1_retrace", icon = icon("th"))
       )
     ),
     dashboardBody(
@@ -30,13 +30,13 @@ shinyUI(
         tabItem(tabName = "round1_anon_reid",
                 fluidRow(
                   box(
-                    title = "ID再識別対応匿名化後データ",
+                    title = "ID再識別対応 匿名化後データ",
                     width = 4,
                     fileInput("file_round1_anon_reid", label = NULL, buttonLabel = "Select File"),
                     h5("大阪のorgtraces_team001_data01_IDP.csvを加工したデータを投稿して下さい")
                   ),
                   box(
-                    title = "フォーマットチェック", 
+                    title = "フォーマットチェック結果", 
                     width = 4, 
                     verbatimTextOutput("format_round1_anon_reid")
                   ), 
