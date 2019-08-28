@@ -60,11 +60,10 @@ utility = function(rawdata = NULL, anondata){
                TIME = rawdata$time_id, 
                USER = rawdata$user_id)
   
-  dat_regid_not_deleted2 = 
+  dat_regid_not_deleted =
     dat_regid %>% 
     dplyr::filter(ANON != "*") %>% 
     tidyr::separate_rows(col = ANON, sep = " ")
-  
   
   dat_regid_deleted_dist = 
     dat_regid %>% 
